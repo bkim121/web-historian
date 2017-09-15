@@ -1,7 +1,10 @@
 var path = require('path');
 var archive = require('../helpers/archive-helpers');
 // require more modules/folders here!
+var fs = require('fs');
 
 exports.handleRequest = function (req, res) {
-  res.end(archive.paths.list);
+  fs.readFile(archive.paths.siteAssets + '/index.html', function (err, data) {
+    res.end(data);
+  });
 };
