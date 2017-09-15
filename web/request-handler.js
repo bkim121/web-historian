@@ -4,7 +4,11 @@ var archive = require('../helpers/archive-helpers');
 var fs = require('fs');
 
 exports.handleRequest = function (req, res) {
-  fs.readFile(archive.paths.siteAssets + '/index.html', function (err, data) {
-    res.end(data);
-  });
+  if (req.url === '/') {
+    fs.readFile(archive.paths.siteAssets + '/index.html', function (err, data) {
+      res.end(data);  
+    });
+  } else {
+    fs.readFile(archive.paths.archivedSites + req.url, (err, data) => res.end(data));
+  }
 };
