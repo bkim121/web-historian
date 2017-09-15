@@ -9,6 +9,13 @@ exports.handleRequest = function (req, res) {
       res.end(data);  
     });
   } else {
-    fs.readFile(archive.paths.archivedSites + req.url, (err, data) => res.end(data));
+    fs.exists(archive.paths.archivedSites + req.url, (exists) => {
+      if (exists) {
+        fs.readFile(archive.paths.archivedSites + req.url, (err, data) => res.end(data));
+      } else {
+        res.writeHead(404, 'Not Found');
+        res.end();
+      }
+    });
   }
 };
