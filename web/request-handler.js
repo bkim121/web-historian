@@ -26,9 +26,11 @@ const posts = {
   write: (req, res) => {
     parseBody(req, 1e6, (err, body) => {
       console.log(body);
-      fs.writeFile(archive.paths.list, body.url + '\n', () => {
+      archive.addUrlToList(body.url, () => {
+        // fs.writeFile(archive.paths.list, body.url + '\n', () => {
         res.writeHead(302, 'Found');
         res.end();
+        // });
       });
     });
   }

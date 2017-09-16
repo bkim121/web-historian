@@ -50,8 +50,8 @@ const isUrlArchived = function(url, callback) {
 
 const downloadUrls = function(urls) {
   urls.forEach(url => fs.open(paths.archivedSites + '/' + url, 'w', (err, fd) => {
-    request('http://' + url, function (error, response, body) {
-      fs.write(fd, body, (err, fd) => fs.close(fd)); // Print the HTML for the Google homepage. 
+    request('https://' + url, function (error, response, body) {
+      fs.write(fd, body, (err, fd) => fs.close(fd, () => console.log('hooray'))); // Print the HTML for the Google homepage. 
     });
   }));
 };

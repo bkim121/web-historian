@@ -16,7 +16,6 @@ var job = new CronJob({
     helpers.readListOfUrls(array => array.forEach(el => {
       helpers.isUrlArchived(el, (archived) => {
         if (!archived) {
-          // newUrls.push(el);
           helpers.downloadUrls([el]);
         }
       });
