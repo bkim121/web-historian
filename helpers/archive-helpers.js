@@ -30,11 +30,11 @@ const readListOfUrls = function(callback) {
   fs.readFile(paths.list, (err, data) => callback(data.toString().split('\n')));
 };
 
-exports.isUrlInList = function(url, callback) {
+const isUrlInList = function(url, callback) {
   readListOfUrls((array) => callback(array.includes(url)));
 };
 
-exports.addUrlToList = function(url, callback) {
+const addUrlToList = function(url, callback) {
   readListOfUrls((array) => {
     array.push(url);
     fs.writeFile(paths.list, array.join('\n'), () => {
@@ -48,13 +48,11 @@ const isUrlArchived = function(url, callback) {
 };
 
 const downloadUrls = function(urls) {
-  urls.forEach(url => {
-    var fd = fs.openSync(paths.archivedSites + '/' + url, 'w');
-    // fs.writeSync(fd, 'google');
-    fs.closeSync(fd);
-  });
+  urls.forEach(url => fs.open(paths.archivedSites + '/' + url, 'w', (err, fd) => fs.close(fd)));
 };
 
+exports.addUrlToList = addUrlToList;
+exports.isUrlInList = isUrlInList;
 exports.readListOfUrls = readListOfUrls;
 exports.isUrlArchived = isUrlArchived;
 exports.downloadUrls = downloadUrls;
