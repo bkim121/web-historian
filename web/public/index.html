@@ -12,10 +12,12 @@
   </form>
 </body>
 <script type="text/javascript">
-  $('button').click(() => {
+  $('button').click((e) => {
+    console.log(typeof $('input').val());
+    // e.preventDefault();
     $.ajax({
-      url: '/',
-      method: 'POST'
+      method: 'POST',
+      url: '/'
     }).then((data) => console.log(data));
   });
 </script>

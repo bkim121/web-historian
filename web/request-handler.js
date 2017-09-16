@@ -5,12 +5,15 @@ var parseBody = require('parse-body');
 
 var archive = require('../helpers/archive-helpers');
 
+
+const readFile = (path, res) => fs.readFile(path, (err, data) => res.end(data));
+
 const gets = {
   'home': (req, res) => fs.readFile(archive.paths.siteAssets + '/index.html', (err, data) => res.end(data)),
   'search': (req, res) => {
     fs.exists(archive.paths.archivedSites + req.url, (exists) => {
       if (exists) {
-        fs.readFile(archive.paths.archivedSites + req.url, (err, data) => res.end(data));
+        readFile(archive.paths.archivedSites + req.url, res);
       } else {
         res.writeHead(404, 'Not Found');
         res.end();
@@ -20,8 +23,9 @@ const gets = {
 };
 
 const posts = {
-  'write': (req, res) => {
+  write: (req, res) => {
     parseBody(req, 1e6, (err, body) => {
+      console.log(body);
       fs.writeFile(archive.paths.list, body.url + '\n', () => {
         res.writeHead(302, 'Found');
         res.end();
@@ -29,8 +33,6 @@ const posts = {
     });
   }
 };
-
-
 
 const methods = {
   'GET': (req, res) => {
@@ -48,23 +50,5 @@ const methods = {
 exports.handleRequest = function (req, res) {
   
   methods[req.method](req, res);
-
-  // if (req.method === 'GET') {
-  //   if (req.url === '/' || req.url === '') {
-
-  //   } else {
-
-  //   }
-  // } else if (req.method === 'POST') {
-
-    // }); 
-
-      // fs.open(archive.paths.list, 'w', (fd) => {
-      //   fs.write(fd, body, (fd) => {
-      //     res.writeHead(302, 'Found');
-      //     res.end();
-      //     fs.close(fd);
-      //   });
-      // });
 
 };

@@ -30,17 +30,31 @@ const readListOfUrls = function(callback) {
   fs.readFile(paths.list, (err, data) => callback(data.toString().split('\n')));
 };
 
-exports.readListOfUrls = readListOfUrls;
-
 exports.isUrlInList = function(url, callback) {
   readListOfUrls((array) => callback(array.includes(url)));
 };
 
 exports.addUrlToList = function(url, callback) {
+  readListOfUrls((array) => {
+    array.push(url);
+    fs.writeFile(paths.list, array.join('\n'), () => {
+      callback();
+    });
+  });
 };
 
-exports.isUrlArchived = function(url, callback) {
+const isUrlArchived = function(url, callback) {
+  fs.exists(paths.archivedSites + '/' + url, (exists) => callback(exists));
 };
 
-exports.downloadUrls = function(urls) {
+const downloadUrls = function(urls) {
+  urls.forEach(url => {
+    var fd = fs.openSync(paths.archivedSites + '/' + url, 'w');
+    // fs.writeSync(fd, 'google');
+    fs.closeSync(fd);
+  });
 };
+
+exports.readListOfUrls = readListOfUrls;
+exports.isUrlArchived = isUrlArchived;
+exports.downloadUrls = downloadUrls;
